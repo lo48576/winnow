@@ -255,7 +255,7 @@ pub fn newline<I, Error: ParseError<I>>(input: I) -> IResult<I, char, Error>
 where
     I: StreamIsPartial,
     I: Stream,
-    <I as Stream>::Token: AsChar + Copy,
+    <I as Stream>::Token: AsChar,
 {
     trace("newline", move |input: I| {
         '\n'.map(|c: <I as Stream>::Token| c.as_char())
@@ -297,7 +297,7 @@ pub fn tab<I, Error: ParseError<I>>(input: I) -> IResult<I, char, Error>
 where
     I: StreamIsPartial,
     I: Stream,
-    <I as Stream>::Token: AsChar + Copy,
+    <I as Stream>::Token: AsChar,
 {
     trace("tab", move |input: I| {
         '\t'.map(|c: <I as Stream>::Token| c.as_char())
@@ -344,7 +344,7 @@ where
     <I as Stream>::Token: AsChar,
 {
     trace("alpha0", move |input: I| {
-        take_while0(|c: <I as Stream>::Token| c.is_alpha()).parse_next(input)
+        take_while0(|c: &<I as Stream>::Token| c.is_alpha()).parse_next(input)
     })
     .parse_next(input)
 }
@@ -387,7 +387,7 @@ where
     <I as Stream>::Token: AsChar,
 {
     trace("alpha1", move |input: I| {
-        take_while1(|c: <I as Stream>::Token| c.is_alpha()).parse_next(input)
+        take_while1(|c: &<I as Stream>::Token| c.is_alpha()).parse_next(input)
     })
     .parse_next(input)
 }
@@ -431,7 +431,7 @@ where
     <I as Stream>::Token: AsChar,
 {
     trace("digit0", move |input: I| {
-        take_while0(|c: <I as Stream>::Token| c.is_dec_digit()).parse_next(input)
+        take_while0(|c: &<I as Stream>::Token| c.is_dec_digit()).parse_next(input)
     })
     .parse_next(input)
 }
@@ -490,7 +490,7 @@ where
     <I as Stream>::Token: AsChar,
 {
     trace("digit1", move |input: I| {
-        take_while1(|c: <I as Stream>::Token| c.is_dec_digit()).parse_next(input)
+        take_while1(|c: &<I as Stream>::Token| c.is_dec_digit()).parse_next(input)
     })
     .parse_next(input)
 }
@@ -532,7 +532,7 @@ where
     <I as Stream>::Token: AsChar,
 {
     trace("hex_digit0", move |input: I| {
-        take_while0(|c: <I as Stream>::Token| c.is_hex_digit()).parse_next(input)
+        take_while0(|c: &<I as Stream>::Token| c.is_hex_digit()).parse_next(input)
     })
     .parse_next(input)
 }
@@ -575,7 +575,7 @@ where
     <I as Stream>::Token: AsChar,
 {
     trace("hex_digit1", move |input: I| {
-        take_while1(|c: <I as Stream>::Token| c.is_hex_digit()).parse_next(input)
+        take_while1(|c: &<I as Stream>::Token| c.is_hex_digit()).parse_next(input)
     })
     .parse_next(input)
 }
@@ -618,7 +618,7 @@ where
     <I as Stream>::Token: AsChar,
 {
     trace("oct_digit0", move |input: I| {
-        take_while0(|c: <I as Stream>::Token| c.is_oct_digit()).parse_next(input)
+        take_while0(|c: &<I as Stream>::Token| c.is_oct_digit()).parse_next(input)
     })
     .parse_next(input)
 }
@@ -661,7 +661,7 @@ where
     <I as Stream>::Token: AsChar,
 {
     trace("oct_digit0", move |input: I| {
-        take_while1(|c: <I as Stream>::Token| c.is_oct_digit()).parse_next(input)
+        take_while1(|c: &<I as Stream>::Token| c.is_oct_digit()).parse_next(input)
     })
     .parse_next(input)
 }
@@ -704,7 +704,7 @@ where
     <I as Stream>::Token: AsChar,
 {
     trace("alphanumeric0", move |input: I| {
-        take_while0(|c: <I as Stream>::Token| c.is_alphanum()).parse_next(input)
+        take_while0(|c: &<I as Stream>::Token| c.is_alphanum()).parse_next(input)
     })
     .parse_next(input)
 }
@@ -747,7 +747,7 @@ where
     <I as Stream>::Token: AsChar,
 {
     trace("alphanumeric1", move |input: I| {
-        take_while1(|c: <I as Stream>::Token| c.is_alphanum()).parse_next(input)
+        take_while1(|c: &<I as Stream>::Token| c.is_alphanum()).parse_next(input)
     })
     .parse_next(input)
 }
@@ -775,10 +775,10 @@ pub fn space0<I, E: ParseError<I>>(input: I) -> IResult<I, <I as Stream>::Slice,
 where
     I: StreamIsPartial,
     I: Stream,
-    <I as Stream>::Token: AsChar + Copy,
+    <I as Stream>::Token: AsChar,
 {
     trace("space0", move |input: I| {
-        take_while0(|c: <I as Stream>::Token| {
+        take_while0(|c: &<I as Stream>::Token| {
             let ch = c.as_char();
             matches!(ch, ' ' | '\t')
         })
@@ -822,10 +822,10 @@ pub fn space1<I, E: ParseError<I>>(input: I) -> IResult<I, <I as Stream>::Slice,
 where
     I: StreamIsPartial,
     I: Stream,
-    <I as Stream>::Token: AsChar + Copy,
+    <I as Stream>::Token: AsChar,
 {
     trace("space1", move |input: I| {
-        take_while1(|c: <I as Stream>::Token| {
+        take_while1(|c: &<I as Stream>::Token| {
             let ch = c.as_char();
             matches!(ch, ' ' | '\t')
         })
@@ -869,10 +869,10 @@ pub fn multispace0<I, E: ParseError<I>>(input: I) -> IResult<I, <I as Stream>::S
 where
     I: StreamIsPartial,
     I: Stream,
-    <I as Stream>::Token: AsChar + Copy,
+    <I as Stream>::Token: AsChar,
 {
     trace("multispace0", move |input: I| {
-        take_while0(|c: <I as Stream>::Token| {
+        take_while0(|c: &<I as Stream>::Token| {
             let ch = c.as_char();
             matches!(ch, ' ' | '\t' | '\r' | '\n')
         })
@@ -916,10 +916,10 @@ pub fn multispace1<I, E: ParseError<I>>(input: I) -> IResult<I, <I as Stream>::S
 where
     I: StreamIsPartial,
     I: Stream,
-    <I as Stream>::Token: AsChar + Copy,
+    <I as Stream>::Token: AsChar,
 {
     trace("multispace1", move |input: I| {
-        take_while1(|c: <I as Stream>::Token| {
+        take_while1(|c: &<I as Stream>::Token| {
             let ch = c.as_char();
             matches!(ch, ' ' | '\t' | '\r' | '\n')
         })
@@ -942,7 +942,7 @@ pub fn dec_uint<I, O, E: ParseError<I>>(input: I) -> IResult<I, O, E>
 where
     I: StreamIsPartial,
     I: Stream,
-    <I as Stream>::Token: AsChar + Copy,
+    <I as Stream>::Token: AsChar,
     O: Uint,
 {
     trace("dec_uint", move |input: I| {
@@ -1095,15 +1095,15 @@ pub fn dec_int<I, O, E: ParseError<I>>(input: I) -> IResult<I, O, E>
 where
     I: StreamIsPartial,
     I: Stream,
-    <I as Stream>::Token: AsChar + Copy,
+    <I as Stream>::Token: AsChar,
     O: Int,
 {
     trace("dec_int", move |input: I| {
-        fn sign(token: impl AsChar) -> bool {
+        fn sign(token: &impl AsChar) -> bool {
             let token = token.as_char();
             token == '+' || token == '-'
         }
-        let (input, sign) = opt(crate::bytes::one_of(sign).map(AsChar::as_char))
+        let (input, sign) = opt(crate::bytes::one_of(sign).map(|c| AsChar::as_char(&c)))
             .map(|c| c != Some('-'))
             .parse_next(input)?;
 
@@ -1370,7 +1370,7 @@ where
     I: Stream,
     I: Offset + Compare<&'static str>,
     <I as Stream>::Slice: ParseSlice<O>,
-    <I as Stream>::Token: AsChar + Copy,
+    <I as Stream>::Token: AsChar,
     <I as Stream>::IterOffsets: Clone,
     I: AsBStr,
     &'static str: ContainsToken<<I as Stream>::Token>,
@@ -1392,7 +1392,7 @@ where
     I: StreamIsPartial,
     I: Stream,
     I: Offset + Compare<&'static str>,
-    <I as Stream>::Token: AsChar + Copy,
+    <I as Stream>::Token: AsChar,
     <I as Stream>::IterOffsets: Clone,
     I: AsBStr,
     &'static str: ContainsToken<<I as Stream>::Token>,
@@ -1411,7 +1411,7 @@ where
     I: StreamIsPartial,
     I: Stream,
     I: Offset + Compare<&'static str>,
-    <I as Stream>::Token: AsChar + Copy,
+    <I as Stream>::Token: AsChar,
     <I as Stream>::IterOffsets: Clone,
     I: AsBStr,
     &'static str: ContainsToken<<I as Stream>::Token>,

@@ -96,7 +96,7 @@ fn message_header(input: Stream<'_>) -> IResult<Stream<'_>, Header<'_>> {
 #[rustfmt::skip]
 #[allow(clippy::match_same_arms)]
 #[allow(clippy::match_like_matches_macro)]
-fn is_token(c: u8) -> bool {
+fn is_token(&c: &u8) -> bool {
   match c {
     128..=255 => false,
     0..=31    => false,
@@ -122,22 +122,22 @@ fn is_token(c: u8) -> bool {
   }
 }
 
-fn is_version(c: u8) -> bool {
+fn is_version(&c: &u8) -> bool {
     (b'0'..=b'9').contains(&c) || c == b'.'
 }
 
-fn not_line_ending(c: u8) -> bool {
+fn not_line_ending(&c: &u8) -> bool {
     c != b'\r' && c != b'\n'
 }
 
-fn is_space(c: u8) -> bool {
+fn is_space(&c: &u8) -> bool {
     c == b' '
 }
 
-fn is_not_space(c: u8) -> bool {
+fn is_not_space(&c: &u8) -> bool {
     c != b' '
 }
 
-fn is_horizontal_space(c: u8) -> bool {
+fn is_horizontal_space(&c: &u8) -> bool {
     c == b' ' || c == b'\t'
 }

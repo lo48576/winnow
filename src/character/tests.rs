@@ -250,18 +250,18 @@ mod complete {
             Err(ErrMode::Backtrack(error_position!(i, ErrorKind::Slice)))
         );
 
-        assert!(AsChar::is_hex_digit(b'0'));
-        assert!(AsChar::is_hex_digit(b'9'));
-        assert!(AsChar::is_hex_digit(b'a'));
-        assert!(AsChar::is_hex_digit(b'f'));
-        assert!(AsChar::is_hex_digit(b'A'));
-        assert!(AsChar::is_hex_digit(b'F'));
-        assert!(!AsChar::is_hex_digit(b'g'));
-        assert!(!AsChar::is_hex_digit(b'G'));
-        assert!(!AsChar::is_hex_digit(b'/'));
-        assert!(!AsChar::is_hex_digit(b':'));
-        assert!(!AsChar::is_hex_digit(b'@'));
-        assert!(!AsChar::is_hex_digit(b'\x60'));
+        assert!(AsChar::is_hex_digit(&b'0'));
+        assert!(AsChar::is_hex_digit(&b'9'));
+        assert!(AsChar::is_hex_digit(&b'a'));
+        assert!(AsChar::is_hex_digit(&b'f'));
+        assert!(AsChar::is_hex_digit(&b'A'));
+        assert!(AsChar::is_hex_digit(&b'F'));
+        assert!(!AsChar::is_hex_digit(&b'g'));
+        assert!(!AsChar::is_hex_digit(&b'G'));
+        assert!(!AsChar::is_hex_digit(&b'/'));
+        assert!(!AsChar::is_hex_digit(&b':'));
+        assert!(!AsChar::is_hex_digit(&b'@'));
+        assert!(!AsChar::is_hex_digit(&b'\x60'));
     }
 
     #[test]
@@ -275,16 +275,16 @@ mod complete {
             Err(ErrMode::Backtrack(error_position!(i, ErrorKind::Slice)))
         );
 
-        assert!(AsChar::is_oct_digit(b'0'));
-        assert!(AsChar::is_oct_digit(b'7'));
-        assert!(!AsChar::is_oct_digit(b'8'));
-        assert!(!AsChar::is_oct_digit(b'9'));
-        assert!(!AsChar::is_oct_digit(b'a'));
-        assert!(!AsChar::is_oct_digit(b'A'));
-        assert!(!AsChar::is_oct_digit(b'/'));
-        assert!(!AsChar::is_oct_digit(b':'));
-        assert!(!AsChar::is_oct_digit(b'@'));
-        assert!(!AsChar::is_oct_digit(b'\x60'));
+        assert!(AsChar::is_oct_digit(&b'0'));
+        assert!(AsChar::is_oct_digit(&b'7'));
+        assert!(!AsChar::is_oct_digit(&b'8'));
+        assert!(!AsChar::is_oct_digit(&b'9'));
+        assert!(!AsChar::is_oct_digit(&b'a'));
+        assert!(!AsChar::is_oct_digit(&b'A'));
+        assert!(!AsChar::is_oct_digit(&b'/'));
+        assert!(!AsChar::is_oct_digit(&b':'));
+        assert!(!AsChar::is_oct_digit(&b'@'));
+        assert!(!AsChar::is_oct_digit(&b'\x60'));
     }
 
     #[test]
@@ -1215,18 +1215,18 @@ mod partial {
             )))
         );
 
-        assert!(AsChar::is_hex_digit(b'0'));
-        assert!(AsChar::is_hex_digit(b'9'));
-        assert!(AsChar::is_hex_digit(b'a'));
-        assert!(AsChar::is_hex_digit(b'f'));
-        assert!(AsChar::is_hex_digit(b'A'));
-        assert!(AsChar::is_hex_digit(b'F'));
-        assert!(!AsChar::is_hex_digit(b'g'));
-        assert!(!AsChar::is_hex_digit(b'G'));
-        assert!(!AsChar::is_hex_digit(b'/'));
-        assert!(!AsChar::is_hex_digit(b':'));
-        assert!(!AsChar::is_hex_digit(b'@'));
-        assert!(!AsChar::is_hex_digit(b'\x60'));
+        assert!(AsChar::is_hex_digit(&b'0'));
+        assert!(AsChar::is_hex_digit(&b'9'));
+        assert!(AsChar::is_hex_digit(&b'a'));
+        assert!(AsChar::is_hex_digit(&b'f'));
+        assert!(AsChar::is_hex_digit(&b'A'));
+        assert!(AsChar::is_hex_digit(&b'F'));
+        assert!(!AsChar::is_hex_digit(&b'g'));
+        assert!(!AsChar::is_hex_digit(&b'G'));
+        assert!(!AsChar::is_hex_digit(&b'/'));
+        assert!(!AsChar::is_hex_digit(&b':'));
+        assert!(!AsChar::is_hex_digit(&b'@'));
+        assert!(!AsChar::is_hex_digit(&b'\x60'));
     }
 
     #[test]
@@ -1246,16 +1246,16 @@ mod partial {
             )))
         );
 
-        assert!(AsChar::is_oct_digit(b'0'));
-        assert!(AsChar::is_oct_digit(b'7'));
-        assert!(!AsChar::is_oct_digit(b'8'));
-        assert!(!AsChar::is_oct_digit(b'9'));
-        assert!(!AsChar::is_oct_digit(b'a'));
-        assert!(!AsChar::is_oct_digit(b'A'));
-        assert!(!AsChar::is_oct_digit(b'/'));
-        assert!(!AsChar::is_oct_digit(b':'));
-        assert!(!AsChar::is_oct_digit(b'@'));
-        assert!(!AsChar::is_oct_digit(b'\x60'));
+        assert!(AsChar::is_oct_digit(&b'0'));
+        assert!(AsChar::is_oct_digit(&b'7'));
+        assert!(!AsChar::is_oct_digit(&b'8'));
+        assert!(!AsChar::is_oct_digit(&b'9'));
+        assert!(!AsChar::is_oct_digit(&b'a'));
+        assert!(!AsChar::is_oct_digit(&b'A'));
+        assert!(!AsChar::is_oct_digit(&b'/'));
+        assert!(!AsChar::is_oct_digit(&b':'));
+        assert!(!AsChar::is_oct_digit(&b'@'));
+        assert!(!AsChar::is_oct_digit(&b'\x60'));
     }
 
     #[test]

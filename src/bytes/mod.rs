@@ -303,7 +303,7 @@ where
 /// assert_eq!(one_of::<_, _, Error<_>>("a").parse_next(""), Err(ErrMode::Backtrack(Error::new("", ErrorKind::Token))));
 ///
 /// fn parser_fn(i: &str) -> IResult<&str, char> {
-///     one_of(|c| c == 'a' || c == 'b').parse_next(i)
+///     one_of(|c: &char| *c == 'a' || *c == 'b').parse_next(i)
 /// }
 /// assert_eq!(parser_fn("abc"), Ok(("bc", 'a')));
 /// assert_eq!(parser_fn("cd"), Err(ErrMode::Backtrack(Error::new("cd", ErrorKind::Verify))));
@@ -320,7 +320,7 @@ where
 /// assert_eq!(one_of::<_, _, Error<_>>("a").parse_next(Partial::new("")), Err(ErrMode::Incomplete(Needed::new(1))));
 ///
 /// fn parser_fn(i: Partial<&str>) -> IResult<Partial<&str>, char> {
-///     one_of(|c| c == 'a' || c == 'b').parse_next(i)
+///     one_of(|c: &char| *c == 'a' || *c == 'b').parse_next(i)
 /// }
 /// assert_eq!(parser_fn(Partial::new("abc")), Ok((Partial::new("bc"), 'a')));
 /// assert_eq!(parser_fn(Partial::new("cd")), Err(ErrMode::Backtrack(Error::new(Partial::new("cd"), ErrorKind::Verify))));
@@ -334,12 +334,11 @@ pub fn one_of<I, T, Error: ParseError<I>>(list: T) -> impl Parser<I, <I as Strea
 where
     I: StreamIsPartial,
     I: Stream,
-    <I as Stream>::Token: Copy,
     T: ContainsToken<<I as Stream>::Token>,
 {
     trace(
         "one_of",
-        any.verify(move |t: &<I as Stream>::Token| list.contains_token(*t)),
+        any.verify(move |t: &<I as Stream>::Token| list.contains_token(t)),
     )
 }
 
@@ -374,12 +373,11 @@ pub fn none_of<I, T, Error: ParseError<I>>(list: T) -> impl Parser<I, <I as Stre
 where
     I: StreamIsPartial,
     I: Stream,
-    <I as Stream>::Token: Copy,
     T: ContainsToken<<I as Stream>::Token>,
 {
     trace(
         "none_of",
-        any.verify(move |t: &<I as Stream>::Token| !list.contains_token(*t)),
+        any.verify(move |t: &<I as Stream>::Token| !list.contains_token(t)),
     )
 }
 
@@ -449,7 +447,7 @@ where
     I: Stream,
     T: ContainsToken<<I as Stream>::Token>,
 {
-    split_at_offset_partial(&i, |c| !list.contains_token(c))
+    split_at_offset_partial(&i, |c| !list.contains_token(&c))
 }
 
 pub(crate) fn complete_take_while_internal<T, I, Error: ParseError<I>>(
@@ -460,7 +458,7 @@ where
     I: Stream,
     T: ContainsToken<<I as Stream>::Token>,
 {
-    split_at_offset_complete(&i, |c| !list.contains_token(c))
+    split_at_offset_complete(&i, |c| !list.contains_token(&c))
 }
 
 /// Recognize the longest (at least 1) input slice that matches the [pattern][ContainsToken]
@@ -551,7 +549,7 @@ where
     T: ContainsToken<<I as Stream>::Token>,
 {
     let e: ErrorKind = ErrorKind::Slice;
-    split_at_offset1_partial(&i, |c| !list.contains_token(c), e)
+    split_at_offset1_partial(&i, |c| !list.contains_token(&c), e)
 }
 
 pub(crate) fn complete_take_while1_internal<T, I, Error: ParseError<I>>(
@@ -563,7 +561,7 @@ where
     T: ContainsToken<<I as Stream>::Token>,
 {
     let e: ErrorKind = ErrorKind::Slice;
-    split_at_offset1_complete(&i, |c| !list.contains_token(c), e)
+    split_at_offset1_complete(&i, |c| !list.contains_token(&c), e)
 }
 
 /// Recognize the longest (m <= len <= n) input slice that matches the [pattern][ContainsToken]
@@ -647,7 +645,7 @@ where
 
     let mut final_count = 0;
     for (processed, (offset, token)) in input.iter_offsets().enumerate() {
-        if !list.contains_token(token) {
+        if !list.contains_token(&token) {
             if processed < m {
                 return Err(ErrMode::from_error_kind(input, ErrorKind::Slice));
             } else {
@@ -689,7 +687,7 @@ where
 
     let mut final_count = 0;
     for (processed, (offset, token)) in input.iter_offsets().enumerate() {
-        if !list.contains_token(token) {
+        if !list.contains_token(&token) {
             if processed < m {
                 return Err(ErrMode::from_error_kind(input, ErrorKind::Slice));
             } else {
@@ -723,7 +721,7 @@ where
 /// use winnow::bytes::take_till0;
 ///
 /// fn till_colon(s: &str) -> IResult<&str, &str> {
-///   take_till0(|c| c == ':').parse_next(s)
+///   take_till0(|c: &char| *c == ':').parse_next(s)
 /// }
 ///
 /// assert_eq!(till_colon("latin:123"), Ok((":123", "latin")));
@@ -739,7 +737,7 @@ where
 /// use winnow::bytes::take_till0;
 ///
 /// fn till_colon(s: Partial<&str>) -> IResult<Partial<&str>, &str> {
-///   take_till0(|c| c == ':').parse_next(s)
+///   take_till0(|c: &char| *c == ':').parse_next(s)
 /// }
 ///
 /// assert_eq!(till_colon(Partial::new("latin:123")), Ok((Partial::new(":123"), "latin")));
@@ -773,7 +771,7 @@ where
     I: Stream,
     T: ContainsToken<<I as Stream>::Token>,
 {
-    split_at_offset_partial(&i, |c| list.contains_token(c))
+    split_at_offset_partial(&i, |c| list.contains_token(&c))
 }
 
 pub(crate) fn complete_take_till_internal<T, I, Error: ParseError<I>>(
@@ -784,7 +782,7 @@ where
     I: Stream,
     T: ContainsToken<<I as Stream>::Token>,
 {
-    split_at_offset_complete(&i, |c| list.contains_token(c))
+    split_at_offset_complete(&i, |c| list.contains_token(&c))
 }
 
 /// Recognize the longest (at least 1) input slice till a [pattern][ContainsToken] is met.
@@ -803,7 +801,7 @@ where
 /// use winnow::bytes::take_till1;
 ///
 /// fn till_colon(s: &str) -> IResult<&str, &str> {
-///   take_till1(|c| c == ':').parse_next(s)
+///   take_till1(|c: &char| *c == ':').parse_next(s)
 /// }
 ///
 /// assert_eq!(till_colon("latin:123"), Ok((":123", "latin")));
@@ -828,7 +826,7 @@ where
 /// use winnow::bytes::take_till1;
 ///
 /// fn till_colon(s: Partial<&str>) -> IResult<Partial<&str>, &str> {
-///   take_till1(|c| c == ':').parse_next(s)
+///   take_till1(|c: &char| *c == ':').parse_next(s)
 /// }
 ///
 /// assert_eq!(till_colon(Partial::new("latin:123")), Ok((Partial::new(":123"), "latin")));
@@ -873,7 +871,7 @@ where
     T: ContainsToken<<I as Stream>::Token>,
 {
     let e: ErrorKind = ErrorKind::Slice;
-    split_at_offset1_partial(&i, |c| list.contains_token(c), e)
+    split_at_offset1_partial(&i, |c| list.contains_token(&c), e)
 }
 
 pub(crate) fn complete_take_till1_internal<T, I, Error: ParseError<I>>(
@@ -885,7 +883,7 @@ where
     T: ContainsToken<<I as Stream>::Token>,
 {
     let e: ErrorKind = ErrorKind::Slice;
-    split_at_offset1_complete(&i, |c| list.contains_token(c), e)
+    split_at_offset1_complete(&i, |c| list.contains_token(&c), e)
 }
 
 /// Recognize an input slice containing the first N input elements (I[..N]).

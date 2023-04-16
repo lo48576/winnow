@@ -21,7 +21,7 @@ fn category_and_keys(i: Stream<'_>) -> IResult<Stream<'_>, (&str, HashMap<&str, 
 
 fn category(i: Stream<'_>) -> IResult<Stream<'_>, &str> {
     terminated(
-        delimited('[', take_while0(|c| c != ']'), ']'),
+        delimited('[', take_while0(|c: &char| *c != ']'), ']'),
         opt(take_while1(" \r\n")),
     )
     .parse_next(i)
@@ -42,12 +42,12 @@ fn key_value(i: Stream<'_>) -> IResult<Stream<'_>, (&str, &str)> {
     Ok((i, (key, val)))
 }
 
-fn is_line_ending_or_comment(chr: char) -> bool {
+fn is_line_ending_or_comment(&chr: &char) -> bool {
     chr == ';' || chr == '\n'
 }
 
 fn not_line_ending(i: Stream<'_>) -> IResult<Stream<'_>, &str> {
-    take_while0(|c| c != '\r' && c != '\n').parse_next(i)
+    take_while0(|&c: &char| c != '\r' && c != '\n').parse_next(i)
 }
 
 fn space_or_line_ending(i: Stream<'_>) -> IResult<Stream<'_>, &str> {

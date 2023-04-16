@@ -195,7 +195,7 @@ mod test {
         };
     }
 
-    fn is_alphabetic(c: char) -> bool {
+    fn is_alphabetic(&c: &char) -> bool {
         (c as u8 >= 0x41 && c as u8 <= 0x5A) || (c as u8 >= 0x61 && c as u8 <= 0x7A)
     }
 
@@ -226,8 +226,8 @@ mod test {
         const INPUT: &str = "βèƒôřèÂßÇáƒƭèř";
         const CONSUMED: &str = "";
         const LEFTOVER: &str = "βèƒôřèÂßÇáƒƭèř";
-        fn while_s(c: char) -> bool {
-            c == '9'
+        fn while_s(c: &char) -> bool {
+            *c == '9'
         }
         fn test(input: &str) -> IResult<&str, &str> {
             take_while0(while_s).parse_next(input)
@@ -261,8 +261,8 @@ mod test {
         const INPUT: &str = "βèƒôřèÂßÇáƒƭèř";
         const CONSUMED: &str = "βèƒôřèÂßÇ";
         const LEFTOVER: &str = "áƒƭèř";
-        fn while_s(c: char) -> bool {
-            matches!(c, 'β' | 'è' | 'ƒ' | 'ô' | 'ř' | 'Â' | 'ß' | 'Ç')
+        fn while_s(c: &char) -> bool {
+            matches!(*c, 'β' | 'è' | 'ƒ' | 'ô' | 'ř' | 'Â' | 'ß' | 'Ç')
         }
         fn test(input: &str) -> IResult<&str, &str> {
             take_while0(while_s).parse_next(input)
@@ -320,8 +320,8 @@ mod test {
         const INPUT: &str = "βèƒôřèÂßÇáƒƭèř";
         const CONSUMED: &str = "βèƒôřèÂßÇ";
         const LEFTOVER: &str = "áƒƭèř";
-        fn while1_s(c: char) -> bool {
-            matches!(c, 'β' | 'è' | 'ƒ' | 'ô' | 'ř' | 'Â' | 'ß' | 'Ç')
+        fn while1_s(c: &char) -> bool {
+            matches!(*c, 'β' | 'è' | 'ƒ' | 'ô' | 'ř' | 'Â' | 'ß' | 'Ç')
         }
         fn test(input: &str) -> IResult<&str, &str> {
             take_while1(while1_s).parse_next(input)
@@ -384,8 +384,8 @@ mod test {
         use winnow::bytes::take_while1;
 
         const INPUT: &str = "βèƒôřèÂßÇáƒƭèř";
-        fn while1_s(c: char) -> bool {
-            c == '9'
+        fn while1_s(c: &char) -> bool {
+            *c == '9'
         }
         fn test(input: &str) -> IResult<&str, &str> {
             take_while1(while1_s).parse_next(input)
@@ -421,8 +421,8 @@ mod test {
         const INPUT: &str = "βèƒôřèÂßÇáƒƭèř";
         const CONSUMED: &str = "βèƒôřèÂßÇ";
         const LEFTOVER: &str = "áƒƭèř";
-        fn till_s(c: char) -> bool {
-            c == 'á'
+        fn till_s(c: &char) -> bool {
+            *c == 'á'
         }
         fn test(input: &str) -> IResult<&str, &str> {
             take_till0(till_s).parse_next(input)

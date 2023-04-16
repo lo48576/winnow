@@ -80,7 +80,7 @@ fn take_till0_issue() {
     use winnow::bytes::take_till0;
 
     fn nothing(i: Partial<&[u8]>) -> IResult<Partial<&[u8]>, &[u8]> {
-        take_till0(|_| true).parse_next(i)
+        take_till0(|_: &u8| true).parse_next(i)
     }
 
     assert_eq!(

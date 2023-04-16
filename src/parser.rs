@@ -652,7 +652,7 @@ impl<I, E> Parser<I, <I as Stream>::Token, E> for char
 where
     I: StreamIsPartial,
     I: Stream,
-    <I as Stream>::Token: AsChar + Copy,
+    <I as Stream>::Token: AsChar,
     E: ParseError<I>,
 {
     fn parse_next(&mut self, i: I) -> IResult<I, <I as Stream>::Token, E> {

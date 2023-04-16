@@ -206,7 +206,7 @@ impl<'a, 'b: 'a> JsonValue<'a, 'b> {
 fn sp<'a, E: ParseError<&'a str>>(i: &'a str) -> IResult<&'a str, &'a str, E> {
     let chars = " \t\r\n";
 
-    take_while0(move |c| chars.contains(c)).parse_next(i)
+    take_while0(move |c: &char| chars.contains(*c)).parse_next(i)
 }
 
 fn parse_str<'a, E: ParseError<&'a str>>(i: &'a str) -> IResult<&'a str, &'a str, E> {
